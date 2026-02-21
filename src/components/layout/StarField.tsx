@@ -50,7 +50,7 @@ export function StarField({ currentPage = 0 }: StarFieldProps) {
           y: Math.random() * canvas.height,
           size: Math.random() * 2.5 + 0.5,
           opacity: Math.random() * 0.6 + 0.3,
-          twinkleSpeed: Math.random() * 0.02 + 0.01,
+          twinkleSpeed: Math.random() * 0.014 + 0.007,
           twinkleOffset: Math.random() * Math.PI * 2,
         });
       }

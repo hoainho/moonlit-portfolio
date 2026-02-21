@@ -51,21 +51,20 @@ export function AboutSection() {
                 </p>
 
                 <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 md:p-4 border border-white/20">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl md:text-2xl">🎓</span>
-                      <div>
-                        <p className="text-amber-50 font-medium text-sm md:text-base">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="text-xl md:text-2xl flex-shrink-0">🎓</span>
+                      <div className="min-w-0">
+                        <p className="text-amber-50 font-medium text-sm md:text-base truncate">
                           {siteConfig.about.education.school}
                         </p>
-                        <p className="text-orange-200/80 text-xs md:text-sm">
-                          {siteConfig.about.education.major} •{" "}
-                          {siteConfig.about.education.year}
+                        <p className="text-orange-200/80 text-xs md:text-sm truncate">
+                          {siteConfig.about.education.major} • {siteConfig.about.education.year}
                         </p>
                       </div>
                     </div>
-                    <div className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-400/20 to-orange-400/20 border border-amber-300/30">
-                      <span className="text-amber-100 text-xs md:text-sm font-semibold">
+                    <div className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-400/20 to-orange-400/20 border border-amber-300/30 self-start sm:self-center flex-shrink-0">
+                      <span className="text-amber-100 text-xs md:text-sm font-semibold whitespace-nowrap">
                         GPA: {siteConfig.about.education.gpa}
                       </span>
                     </div>

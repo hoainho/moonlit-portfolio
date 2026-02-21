@@ -190,6 +190,15 @@ a:hover {
   }
 }
 
+@keyframes bounceX {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
 /* ============================================
    UTILITY CLASSES
    ============================================ */
@@ -208,6 +217,10 @@ a:hover {
 
 .animate-drift {
   animation: drift 30s linear infinite;
+}
+
+.animate-bounce-x {
+  animation: bounceX 1.5s ease-in-out infinite;
 }
 
 .glass {

@@ -69,7 +69,7 @@ export const portfolioItems = [
   },
   {
     id: 2,
-    title: "Tiêu Kỳ",
+    title: "Tễu Ký",
     category: "Event Design",
     image: "/tue-ky.png",
     description: "Key Visual Event Design System. Developed main visuals, logo, brand identity, posters, banners, backdrops, tickets, and social media content ensuring visual consistency across all platforms.",

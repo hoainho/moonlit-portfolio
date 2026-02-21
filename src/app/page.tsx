@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { ContinuousSky } from '@/components/layout/ContinuousSky';
 import { StarField } from '@/components/layout/StarField';
 import { CloudsLayer } from '@/components/layout/Clouds';
+import { Loader } from '@/components/layout/Loader';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { AboutSection } from '@/components/sections/AboutSection';
 import { PortfolioSection } from '@/components/sections/PortfolioSection';
@@ -15,6 +16,7 @@ import { ContactSection } from '@/components/sections/ContactSection';
 const SECTIONS = ['home', 'about', 'works', 'skills', 'contact'];
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -171,34 +173,41 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={containerRef} className="fixed inset-0 overflow-hidden">
-      <ContinuousSky currentPage={currentPage} totalPages={SECTIONS.length} />
-      <StarField currentPage={currentPage} />
-      <CloudsLayer currentPage={currentPage} />
-      <Header currentPage={currentPage} onNavigate={goToPage} sections={SECTIONS} />
+    <>
+      {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
       
-      <main className="relative h-full w-full z-10">
-        <HeroSection />
-        <AboutSection />
-        <PortfolioSection />
-        <SkillsSection />
-        <ContactSection />
-      </main>
+      <div 
+        ref={containerRef} 
+        className={`fixed inset-0 overflow-hidden transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+      >
+        <ContinuousSky currentPage={currentPage} totalPages={SECTIONS.length} />
+        <StarField currentPage={currentPage} />
+        <CloudsLayer currentPage={currentPage} />
+        <Header currentPage={currentPage} onNavigate={goToPage} sections={SECTIONS} />
+        
+        <main className="relative h-full w-full">
+          <HeroSection />
+          <AboutSection />
+          <PortfolioSection />
+          <SkillsSection />
+          <ContactSection />
+        </main>
 
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2">
-        {SECTIONS.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToPage(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentPage 
-                ? 'bg-white scale-150 shadow-lg shadow-white/30' 
-                : 'bg-white/30 hover:bg-white/60'
-            }`}
-            aria-label={`Go to ${SECTIONS[index]}`}
-          />
-        ))}
+        <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2">
+          {SECTIONS.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToPage(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentPage 
+                  ? 'bg-white scale-150 shadow-lg shadow-white/30' 
+                  : 'bg-white/30 hover:bg-white/60'
+              }`}
+              aria-label={`Go to ${SECTIONS[index]}`}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
