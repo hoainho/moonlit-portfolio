@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Quicksand, Inter } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",
@@ -77,6 +78,7 @@ export default function RootLayout({
     <html lang="vi" className="dark">
       <body className={`${quicksand.variable} ${inter.variable} antialiased`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
