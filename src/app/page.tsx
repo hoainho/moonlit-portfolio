@@ -92,31 +92,33 @@ export default function Home() {
   }, []);
 
   const handleWheel = useCallback((e: WheelEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.portfolio-modal-overlay')) return;
+
     e.preventDefault();
     
     if (isAnimatingRef.current) return;
-
     const delta = e.deltaY;
     const threshold = 30;
-
     if (delta > threshold) {
       goToPage(currentPageRef.current + 1);
     } else if (delta < -threshold) {
       goToPage(currentPageRef.current - 1);
     }
   }, [goToPage]);
-
   const handleTouchStart = useCallback((e: TouchEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.portfolio-modal-overlay')) return;
     touchStartY.current = e.touches[0].clientY;
   }, []);
-
   const handleTouchEnd = useCallback((e: TouchEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.portfolio-modal-overlay')) return;
     if (isAnimatingRef.current) return;
 
     const touchEndY = e.changedTouches[0].clientY;
     const delta = touchStartY.current - touchEndY;
     const threshold = 50;
-
     if (delta > threshold) {
       goToPage(currentPageRef.current + 1);
     } else if (delta < -threshold) {
@@ -126,7 +128,7 @@ export default function Home() {
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (isAnimatingRef.current) return;
-
+    if (document.querySelector('.portfolio-modal-overlay')) return;
     if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
       e.preventDefault();
       goToPage(currentPageRef.current + 1);
