@@ -2,13 +2,19 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-import { portfolioItems } from '@/lib/constants';
+import { portfolioItems, siteConfig } from '@/lib/constants';
 
 const categories = ['All', 'Event Design', 'Brand Identity', 'Typography', 'Illustration'];
 const SWIPE_THRESHOLD = 50;
 const AUTO_PLAY_INTERVAL = 4000;
 const AUTO_PLAY_THRESHOLD = 4;
 const ITEMS_TO_SHOW = 3;
+
+
+const getBehanceEmbedUrl = (behanceUrl: string): string | null => {
+  const match = behanceUrl.match(/gallery\/(\d+)/);
+  return match ? `https://www.behance.net/embed/project/${match[1]}?ilo0=1` : null;
+};
 
 export function PortfolioSection() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -21,6 +27,7 @@ export function PortfolioSection() {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
   
   const sectionRef = useRef<HTMLElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -166,12 +173,13 @@ export function PortfolioSection() {
   };
 
   const openModal = (item: typeof portfolioItems[0]) => {
+    setIframeLoaded(false);
     setSelectedProject(item);
     setTimeout(() => setIsModalVisible(true), 10);
   };
-
   const closeModal = () => {
     setIsModalVisible(false);
+    setIframeLoaded(false);
     setTimeout(() => setSelectedProject(null), 300);
   };
 
@@ -440,10 +448,12 @@ export function PortfolioSection() {
         </div>
       </section>
 
-      {selectedProject && (
+      {selectedProject && (() => {
+        const embedUrl = selectedProject.behanceUrl ? getBehanceEmbedUrl(selectedProject.behanceUrl) : null;
+        return (
         <div
           className={cn(
-            "fixed inset-0 z-[200] flex items-center justify-center p-4 transition-all duration-300",
+            "portfolio-modal-overlay fixed inset-0 z-[200] flex items-center justify-center p-4 transition-all duration-300",
             isModalVisible ? "opacity-100" : "opacity-0"
           )}
           onClick={closeModal}
@@ -478,51 +488,83 @@ export function PortfolioSection() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-
-            <div className="aspect-video flex items-center justify-center relative overflow-hidden rounded-t-2xl">
-              {selectedProject.image ? (
+            {/* Behance Embed or Project Image */}
+            {embedUrl ? (
+              <div className="relative w-full rounded-t-2xl overflow-hidden" style={{ height: 'min(40vh, 320px)' }}>
+                {!iframeLoaded && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                    <div className="w-full h-full animate-pulse" style={{
+                      background: 'linear-gradient(135deg, rgba(254, 243, 199, 0.8) 0%, rgba(253, 230, 138, 0.6) 50%, rgba(251, 191, 36, 0.4) 100%)',
+                    }} />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                      <div className="w-8 h-8 border-3 border-amber-300 border-t-amber-600 rounded-full animate-spin" />
+                      <span className="text-amber-700/70 text-xs font-medium">Loading Behance project...</span>
+                    </div>
+                  </div>
+                )}
+                <iframe
+                  src={embedUrl}
+                  className={cn(
+                    "w-full h-full border-0 transition-opacity duration-500",
+                    iframeLoaded ? "opacity-100" : "opacity-0"
+                  )}
+                  allowFullScreen
+                  loading="lazy"
+                  allow="clipboard-write"
+                  onLoad={() => setIframeLoaded(true)}
+                  title={`${selectedProject.title} - Behance Project`}
+                />
+              </div>
+            ) : (
+              selectedProject.image ? (
                 <img 
                   src={selectedProject.image} 
                   alt={selectedProject.title}
-                  className="w-full h-full object-cover"
+                  className="w-full rounded-t-2xl object-cover"
                 />
               ) : (
                 <div 
-                  className="w-full h-full flex items-center justify-center"
+                  className="w-full aspect-[4/3] rounded-t-2xl flex items-center justify-center"
                   style={{
                     background: 'linear-gradient(135deg, rgba(254, 243, 199, 1) 0%, rgba(253, 230, 138, 0.8) 100%)',
                   }}
                 >
                   <span className="text-7xl opacity-40">🎨</span>
                 </div>
-              )}
-            </div>
+              )
+            )}
 
-            <div className="p-6 bg-white/60 backdrop-blur-sm">
+            {/* Project Info */}
+            <div className="p-6 bg-white/60 backdrop-blur-sm rounded-b-2xl">
               <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-sm mb-3">
                 {selectedProject.category}
               </span>
-              
               <h3 className="text-slate-800 text-xl md:text-2xl font-heading mb-3">
                 {selectedProject.title}
               </h3>
-              
               <p className="text-slate-600 text-sm md:text-base mb-5 leading-relaxed">
                 {selectedProject.description}
               </p>
-
               <div className="space-y-3">
                 <div>
                   <span className="text-slate-500 text-xs uppercase tracking-wider font-medium">Tools</span>
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {selectedProject.tools.map((tool, index) => (
-                      <span 
-                        key={index}
-                        className="px-3 py-1 rounded-full text-xs font-medium bg-white/80 text-slate-700 border border-amber-200/50 shadow-sm"
-                      >
-                        {tool}
-                      </span>
-                    ))}
+                    {selectedProject.tools.map((tool, index) => {
+                      const skillData = siteConfig.skills.tools.find(s => s.name === tool);
+                      return (
+                        <span
+                          key={index}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-white/90 text-slate-700 border border-amber-200/50 shadow-sm"
+                        >
+                          {skillData && (
+                            <span className="text-[10px] font-bold bg-gradient-to-br from-sky-500 to-blue-600 bg-clip-text text-transparent">
+                              {skillData.icon}
+                            </span>
+                          )}
+                          {tool}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -532,10 +574,25 @@ export function PortfolioSection() {
                   </span>
                 </div>
               </div>
+              {selectedProject.behanceUrl && (
+                <a
+                  href={selectedProject.behanceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-slate-800 shadow-lg shadow-slate-800/20 hover:bg-slate-700 hover:shadow-xl hover:shadow-slate-800/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  View on Behance
+                </a>
+              )}
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
     </>
   );
 }

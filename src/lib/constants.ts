@@ -65,7 +65,8 @@ export const portfolioItems = [
     image: "/dieu-am-vang.png",
     description: "Graduation Project - Event Graphics System for the Southern Handicraft Village Exhibition & Conference. Developed a comprehensive visual identity system reflecting Southern Vietnam's cultural heritage.",
     tools: ["Photoshop", "Illustrator", "InDesign", "After Effects"],
-    year: "2024"
+    year: "2024",
+    behanceUrl: "https://www.behance.net/gallery/244572909/D-AN-TT-NGHIP-HN-SC-NAM-B-2026"
   },
   {
     id: 2,
@@ -74,7 +75,8 @@ export const portfolioItems = [
     image: "/tue-ky.png",
     description: "Key Visual Event Design System. Developed main visuals, logo, brand identity, posters, banners, backdrops, tickets, and social media content ensuring visual consistency across all platforms.",
     tools: ["Photoshop", "Illustrator"],
-    year: "2024"
+    year: "2024",
+    behanceUrl: "https://www.behance.net/gallery/244519139/XAY-DNG-H-THNG-S-KIN-TU-KY-FESTIVAL-2025"
   },
   {
     id: 3,
@@ -83,7 +85,8 @@ export const portfolioItems = [
     image: "/nha-ngoai.png",
     description: "Complete Brand Identity Design including logo, color palette, typography, graphic elements, business cards, packaging, and social media visuals with comprehensive brand guidelines.",
     tools: ["Illustrator", "Photoshop", "InDesign"],
-    year: "2024"
+    year: "2024",
+    behanceUrl: "https://www.behance.net/gallery/244572517/THIT-K-BAO-BI-BANH-KO-TUI-THO-NHA-NGOI"
   },
   {
     id: 4,
@@ -92,7 +95,8 @@ export const portfolioItems = [
     image: "/fresh-fruit.png",
     description: "Beverage Brand Identity Design featuring logo, visual identity system, packaging labels, cups, bottles, menus, promotional materials, and in-store imagery.",
     tools: ["Illustrator", "Photoshop"],
-    year: "2024"
+    year: "2024",
+    behanceUrl: "https://www.behance.net/gallery/244573223/BRANDING-FRESH-TRUIT"
   },
   {
     id: 5,
@@ -101,7 +105,8 @@ export const portfolioItems = [
     image: "/dragon.png",
     description: "Typography Design Project exploring creative typographic layouts, experimental letterforms, spacing, grid systems, and expressive conceptual typography with strong visual impact.",
     tools: ["Illustrator", "Photoshop"],
-    year: "2024"
+    year: "2024",
+    behanceUrl: "https://www.behance.net/gallery/244573119/TYPROGRAPHY-DRAGON-SERIF-2024"
   },
   {
     id: 6,
@@ -110,7 +115,8 @@ export const portfolioItems = [
     image: "/tu-phu.png",
     description: "Team Publication Project with 'Four Palaces' cultural theme. Created and refined illustrative elements, supported layout design with supplementary illustrations for typography and page layout.",
     tools: ["InDesign", "Illustrator", "Photoshop"],
-    year: "2024"
+    year: "2024",
+    behanceUrl: "https://www.behance.net/gallery/244572163/THIT-K-DAN-TRANG-T-PH"
   },
   {
     id: 7,
